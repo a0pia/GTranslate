@@ -454,7 +454,7 @@ class TranslatorApp(QWidget):
     def _setup_tray(self):
         self.tray_icon = QSystemTrayIcon(self)
         
-        # Create a very bold white 'G' for menu bar
+        # Create a very bold white 'G' for menu bar (ExtraBold weight)
         pixmap = QPixmap(64, 64)
         pixmap.fill(Qt.GlobalColor.transparent)
         from PyQt6.QtGui import QPainter, QColor, QFont
@@ -463,7 +463,7 @@ class TranslatorApp(QWidget):
         
         # Draw a pure white "G" with maximum thickness
         painter.setPen(QColor(255, 255, 255))
-        # ExtraBold weight (900) + Large font size
+        # ExtraBold weight (900) + Large font size + System Native
         font = QFont(".AppleSystemUIFont", 52, QFont.Weight.ExtraBold)
         painter.setFont(font)
         painter.drawText(pixmap.rect(), Qt.AlignmentFlag.AlignCenter, "G")
@@ -472,16 +472,50 @@ class TranslatorApp(QWidget):
         self.tray_icon.setIcon(QIcon(pixmap))
         self.tray_icon.setToolTip("GTranslate")
         
-        # Tray Menu (Only for Right Click)
+        # Tray Menu
         self.tray_menu = QMenu()
-        quit_action = QAction("Tamamen Kapat", self)
+        
+        # -- Permission Check Section --
+        self.perm_action = QAction("⚠️ İzin Gerekiyor / Permission Required", self)
+        self.perm_action.setVisible(False) # Default hidden
+        self.perm_action.triggered.connect(self._open_system_settings)
+        self.tray_menu.addAction(self.perm_action)
+        self.tray_menu.addSeparator()
+        
+        # Check permissions after short delay to not block UI
+        QTimer.singleShot(1000, self._check_and_update_permissions)
+        
+        quit_action = QAction("Tamamen Kapat / Quit", self)
         quit_action.triggered.connect(QApplication.instance().quit)
         self.tray_menu.addAction(quit_action)
         
-        # On macOS, setContextMenu makes it show on left click too if not handled carefully.
-        # We'll handle activation manually for left click.
         self.tray_icon.activated.connect(self._on_tray_activated)
         self.tray_icon.show()
+
+    def _check_and_update_permissions(self):
+        """Checks macOS permissions and updates the menu."""
+        import Quartz
+        import ApplicationServices
+        
+        # 1. Screen Recording Check (Native macOS call via Quartz)
+        # We check if we can actually get a window list with titles
+        has_screen = Quartz.CGPreflightScreenCaptureAccess()
+        
+        # 2. Accessibility Check
+        has_acc = ApplicationServices.AXIsProcessTrusted()
+        
+        if not has_screen or not has_acc:
+            self.perm_action.setVisible(True)
+            self.perm_action.setText("⚠️ Lütfen İzin Verin / Please Grant Permissions")
+        else:
+            self.perm_action.setVisible(False)
+
+    def _open_system_settings(self):
+        """Opens macOS System Settings for Privacy & Security."""
+        import subprocess
+        # Opens the Privacy & Security panel directly
+        subprocess.run(["open", "x-apple.systempreferences:com.apple.preference.security?Privacy_ScreenCapture"])
+        subprocess.run(["open", "x-apple.systempreferences:com.apple.preference.security?Privacy_Accessibility"])
 
         # Animation setup
         self._anim = QPropertyAnimation(self, b"pos")
