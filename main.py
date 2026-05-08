@@ -97,10 +97,7 @@ class RegionPickerDialog(QDialog):
         tmp = REGION_TMP_PATH
         img_path, _ = capture_window(self.window_info, tmp)
         if not img_path or not os.path.exists(img_path):
-            QMessageBox.warning(self, "Hata", 
-                                "Pencere ekran görüntüsü alınamadı.\n\n"
-                                "Lütfen 'Sistem Ayarları > Gizlilik ve Güvenlik > Ekran Kaydı' "
-                                "bölümünden Terminal veya Uygulama için izin verildiğinden emin olun.")
+            self.update_status("Ekran goruntüsü alinamadi. Lutfen izinleri kontrol edin.")
             self.reject()
             return
 

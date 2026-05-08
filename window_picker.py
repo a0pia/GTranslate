@@ -1,74 +1,136 @@
+"""
+Screen capture using Quartz CGDisplayCreateImage.
+Reliable for standalone .app bundles - uses the TCC permission
+granted to the bundle directly, unlike screencapture subprocess.
+"""
 import Quartz
 from Foundation import NSURL
 import os
-import subprocess
+import tempfile
 
 
 def check_and_request_permission():
     """
-    Checks if Screen Recording permission is granted silently.
+    Tests Screen Recording permission by actually attempting a capture.
+    CGPreflightScreenCaptureAccess() is broken on macOS Sonoma/Sequoia.
     """
-    return Quartz.CGPreflightScreenCaptureAccess()
+    tmp = tempfile.mktemp(suffix=".png")
+    try:
+        display_id = Quartz.CGMainDisplayID()
+        # Create a tiny 1x1 crop to test
+        image = Quartz.CGDisplayCreateImageForRect(
+            display_id,
+            Quartz.CGRectMake(0, 0, 1, 1)
+        )
+        if image is None:
+            return False
+        url = NSURL.fileURLWithPath_(tmp)
+        dest = Quartz.CGImageDestinationCreateWithURL(url, 'public.png', 1, None)
+        if dest:
+            Quartz.CGImageDestinationAddImage(dest, image, None)
+            Quartz.CGImageDestinationFinalize(dest)
+        return os.path.exists(tmp) and os.path.getsize(tmp) > 0
+    except Exception:
+        return False
+    finally:
+        try:
+            if os.path.exists(tmp):
+                os.remove(tmp)
+        except Exception:
+            pass
 
 
-def _screencapture_region(x, y, w, h, output_path):
+def _capture_display_to_file(output_path: str) -> bool:
     """
-    Uses Apple's system screencapture binary to capture a screen region.
-    This is the ONLY method that reliably works from a standalone .app bundle
-    because screencapture is Apple-signed and inherits the app's TCC permission.
+    Captures the full display using CGDisplayCreateImage.
+    Works reliably in standalone .app bundles with proper TCC permission.
     """
     abs_path = os.path.abspath(output_path)
     try:
-        result = subprocess.run(
-            ['/usr/sbin/screencapture', '-x', '-R', f'{int(x)},{int(y)},{int(w)},{int(h)}', abs_path],
-            capture_output=True,
-            timeout=5
-        )
-        if result.returncode == 0 and os.path.exists(abs_path) and os.path.getsize(abs_path) > 1000:
-            return abs_path
+        display_id = Quartz.CGMainDisplayID()
+        image = Quartz.CGDisplayCreateImage(display_id)
+        if image is None:
+            return False
+        url = NSURL.fileURLWithPath_(abs_path)
+        dest = Quartz.CGImageDestinationCreateWithURL(url, 'public.png', 1, None)
+        if dest is None:
+            return False
+        Quartz.CGImageDestinationAddImage(dest, image, None)
+        if not Quartz.CGImageDestinationFinalize(dest):
+            return False
+        return os.path.exists(abs_path) and os.path.getsize(abs_path) > 1000
     except Exception as e:
-        print(f"[screencapture] Region capture failed: {e}")
-    return None
+        print(f"[_capture_display_to_file] Error: {e}")
+        return False
 
 
-def _screencapture_window(wid, output_path):
-    """
-    Captures a specific window by ID using Apple's screencapture binary.
-    """
-    abs_path = os.path.abspath(output_path)
+def _crop_image(src_path: str, x: int, y: int, w: int, h: int, out_path: str) -> bool:
+    """Crops a region from a full-screen capture (Retina-aware)."""
     try:
-        result = subprocess.run(
-            ['/usr/sbin/screencapture', '-x', '-l', str(wid), abs_path],
-            capture_output=True,
-            timeout=5
-        )
-        if result.returncode == 0 and os.path.exists(abs_path) and os.path.getsize(abs_path) > 1000:
-            return abs_path
+        url = NSURL.fileURLWithPath_(src_path)
+        src_img = Quartz.CGImageSourceCreateWithURL(url, None)
+        if not src_img:
+            return False
+        cg_img = Quartz.CGImageSourceCreateImageAtIndex(src_img, 0, None)
+        if not cg_img:
+            return False
+
+        img_w = Quartz.CGImageGetWidth(cg_img)
+        img_h = Quartz.CGImageGetHeight(cg_img)
+        screen = Quartz.CGDisplayBounds(Quartz.CGMainDisplayID())
+        logical_w = screen.size.width
+        scale = img_w / logical_w if logical_w > 0 else 1.0
+
+        px = max(0, int(x * scale))
+        py = max(0, int(y * scale))
+        pw = min(int(w * scale), img_w - px)
+        ph = min(int(h * scale), img_h - py)
+
+        if pw <= 0 or ph <= 0:
+            return False
+
+        crop_rect = Quartz.CGRectMake(px, py, pw, ph)
+        cropped = Quartz.CGImageCreateWithImageInRect(cg_img, crop_rect)
+        if not cropped:
+            return False
+
+        out_url = NSURL.fileURLWithPath_(out_path)
+        dest = Quartz.CGImageDestinationCreateWithURL(out_url, 'public.png', 1, None)
+        if not dest:
+            return False
+        Quartz.CGImageDestinationAddImage(dest, cropped, None)
+        return Quartz.CGImageDestinationFinalize(dest)
     except Exception as e:
-        print(f"[screencapture] Window capture failed: {e}")
-    return None
+        print(f"[_crop_image] Error: {e}")
+        return False
 
 
 def fast_capture_region(crop_region: dict, output_path: str = "win_capture.png") -> str | None:
-    """
-    Captures a specific screen region using Apple's system screencapture.
-    crop_region: {left, top, width, height} in LOGICAL screen coordinates.
-    Returns output_path on success, None on failure.
-    """
-    x = crop_region.get('left', 0)
-    y = crop_region.get('top', 0)
-    w = crop_region.get('width', 100)
-    h = crop_region.get('height', 100)
-    return _screencapture_region(x, y, w, h, output_path)
+    """Captures a screen region using CGDisplayCreateImage."""
+    tmp_full = output_path + "_full.png"
+    abs_path = os.path.abspath(output_path)
+    try:
+        if not _capture_display_to_file(tmp_full):
+            return None
+        x = crop_region.get('left', 0)
+        y = crop_region.get('top', 0)
+        w = crop_region.get('width', 100)
+        h = crop_region.get('height', 100)
+        if _crop_image(tmp_full, x, y, w, h, abs_path):
+            return abs_path
+        return None
+    finally:
+        try:
+            if os.path.exists(tmp_full):
+                os.remove(tmp_full)
+        except Exception:
+            pass
 
 
 def get_open_windows():
-    """
-    Returns a list of all visible, on-screen windows with their info.
-    """
+    """Returns a list of all visible, on-screen windows."""
     options = Quartz.kCGWindowListOptionOnScreenOnly | Quartz.kCGWindowListExcludeDesktopElements
     windows_info = Quartz.CGWindowListCopyWindowInfo(options, Quartz.kCGNullWindowID)
-
     result = []
 
     for w in windows_info:
@@ -80,12 +142,10 @@ def get_open_windows():
 
         if layer != 0 and not title:
             continue
-
         if not app_name or app_name in ('Window Server', 'Dock', 'SystemUIServer'):
             continue
 
         display_name = f"[{wid}] {app_name}" + (f" - {title}" if title else "")
-
         x = bounds.get('X', 0)
         y = bounds.get('Y', 0)
         w_size = bounds.get('Width', 0)
@@ -101,52 +161,29 @@ def get_open_windows():
             'display': display_name,
             'bounds': (int(x), int(y), int(w_size), int(h_size))
         })
-
     return result
 
 
 def capture_window(window_info, output_path="win_capture.png"):
-    """
-    Captures a window's content using Apple's screencapture binary.
-    Strategy 1: Window-locked capture by window ID.
-    Strategy 2: Region capture (by screen coordinates).
-    """
-    wid = window_info['id']
+    """Captures a window's region using CGDisplayCreateImage."""
     abs_path = os.path.abspath(output_path)
     x, y, w, h = window_info['bounds']
     region = {"left": x, "top": y, "width": w, "height": h}
 
-    # --- Strategy 1: screencapture by window ID ---
-    result = _screencapture_window(wid, abs_path)
+    result = fast_capture_region(region, abs_path)
     if result:
         return abs_path, region
 
-    # --- Strategy 2: screencapture by screen region ---
-    result = _screencapture_region(x, y, w, h, abs_path)
-    if result:
-        return abs_path, region
-
-    print(f"[capture_window] All strategies failed for window {wid}")
+    print(f"[capture_window] Capture failed for window {window_info.get('id')}")
     return None, None
 
 
 def capture_window_region(window_info, crop_region, output_path="win_capture.png"):
-    """
-    Captures a specific region of the screen.
-    If crop_region is provided, captures that exact region.
-    Otherwise captures the full window.
-    """
+    """Captures a specific region of the screen."""
     abs_path = os.path.abspath(output_path)
-
     if crop_region:
-        x = crop_region.get('left', 0)
-        y = crop_region.get('top', 0)
-        w = crop_region.get('width', 100)
-        h = crop_region.get('height', 100)
-        result = _screencapture_region(x, y, w, h, abs_path)
+        result = fast_capture_region(crop_region, abs_path)
         if result:
             return abs_path, crop_region
         return None, None
-
-    # No crop region → capture the whole window
     return capture_window(window_info, output_path)
