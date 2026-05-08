@@ -207,9 +207,9 @@ class TranslatorApp(QWidget):
                 "saved_regs_placeholder": "-- Kayıtlı Bölgeler --", "region_label": "Bölge",
                 "pin": "Sabitle", "pinned": "Sabitlendi",
                 "perm_title": "Ekran Kaydı İzni Gerekli",
-                "perm_desc": "GTranslate'in ekranınızdaki metinleri okuyup çevirebilmesi için 'Ekran Kaydı' iznine ihtiyacı vardır.\n\nBu izin sadece metin tanıma (OCR) için kullanılır. Verileriniz asla kaydedilmez veya paylaşılmaz.",
+                "perm_desc": "GTranslate'in diğer pencereleri görebilmesi için 'Ekran Kaydı' iznine ihtiyacı vardır.\n\nÖNEMLİ: İzin verdikten sonra uygulamayı 'Uygulamadan Çık' butonuyla kapatıp YENİDEN BAŞLATMANIZ zorunludur.",
                 "perm_btn": "Sistem Ayarlarını Aç",
-                "perm_footer": "İzin verdikten sonra uygulamayı yeniden başlatmanız gerekebilir.",
+                "perm_footer": "Eğer izin vermenize rağmen geçmiyorsa, uygulamayı kapatıp tekrar açın.",
                 "btn_force": "Yine de Devam Et (Eğer izin verdiyseniz)"
             },
             "en": {
@@ -225,9 +225,9 @@ class TranslatorApp(QWidget):
                 "saved_regs_placeholder": "-- Saved Regions --", "region_label": "Region",
                 "pin": "Pin", "pinned": "Pinned",
                 "perm_title": "Screen Recording Required",
-                "perm_desc": "GTranslate needs 'Screen Recording' permission to capture and translate text from other windows.\n\nThis is only used for text recognition (OCR). Your data is never saved or shared.",
+                "perm_desc": "GTranslate needs 'Screen Recording' permission to see other windows.\n\nIMPORTANT: You MUST 'Quit' and 'Restart' the app after granting permission for it to take effect.",
                 "perm_btn": "Open System Settings",
-                "perm_footer": "You might need to restart the app after granting permission.",
+                "perm_footer": "If it still doesn't work after granting, please restart the app.",
                 "btn_force": "Continue Anyway (If permissions are granted)"
             },
             "de": {
@@ -773,7 +773,7 @@ class TranslatorApp(QWidget):
         self.perm_desc_lbl = QLabel("...")
         self.perm_desc_lbl.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.perm_desc_lbl.setWordWrap(True)
-        self.perm_desc_lbl.setStyleSheet("font-size: 10px; color: #ccc; line-height: 1.3;")
+        self.perm_desc_lbl.setStyleSheet("font-size: 11px; color: #f1c40f; line-height: 1.4; font-weight: bold; background: rgba(241, 196, 15, 0.05); padding: 5px; border-radius: 5px;")
         perm_lay.addWidget(self.perm_desc_lbl)
 
         perm_lay.addStretch()
