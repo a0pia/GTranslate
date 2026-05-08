@@ -209,7 +209,8 @@ class TranslatorApp(QWidget):
                 "perm_title": "Ekran Kaydı İzni Gerekli",
                 "perm_desc": "GTranslate'in ekranınızdaki metinleri okuyup çevirebilmesi için 'Ekran Kaydı' iznine ihtiyacı vardır.\n\nBu izin sadece metin tanıma (OCR) için kullanılır. Verileriniz asla kaydedilmez veya paylaşılmaz.",
                 "perm_btn": "Sistem Ayarlarını Aç",
-                "perm_footer": "İzin verdikten sonra uygulamayı yeniden başlatmanız gerekebilir."
+                "perm_footer": "İzin verdikten sonra uygulamayı yeniden başlatmanız gerekebilir.",
+                "btn_force": "Yine de Devam Et (Eğer izin verdiyseniz)"
             },
             "en": {
                 "title": "GTranslate", "step1": "1. Select Window:", "step2": "2. Select Region:", "step3": "3. Target Language:",
@@ -226,7 +227,8 @@ class TranslatorApp(QWidget):
                 "perm_title": "Screen Recording Required",
                 "perm_desc": "GTranslate needs 'Screen Recording' permission to capture and translate text from other windows.\n\nThis is only used for text recognition (OCR). Your data is never saved or shared.",
                 "perm_btn": "Open System Settings",
-                "perm_footer": "You might need to restart the app after granting permission."
+                "perm_footer": "You might need to restart the app after granting permission.",
+                "btn_force": "Continue Anyway (If permissions are granted)"
             },
             "de": {
                 "title": "GTranslate", "step1": "1. Fenster wählen:", "step2": "2. Bereich wählen:", "step3": "3. Zielsprache:",
@@ -599,7 +601,20 @@ class TranslatorApp(QWidget):
         import Quartz
         import ApplicationServices
         
+        # 1. Screen Recording Check (Multiple strategies)
         has_screen = Quartz.CGPreflightScreenCaptureAccess()
+        
+        # Fallback: try to see if we can read window names
+        if not has_screen:
+            options = Quartz.kCGWindowListOptionOnScreenOnly
+            window_list = Quartz.CGWindowListCopyWindowInfo(options, Quartz.kCGNullWindowID)
+            if window_list:
+                # If we see any window with a title, we likely have permission
+                has_titles = any(w.get('kCGWindowName') for w in window_list if w.get('kCGWindowLayer') == 0)
+                if has_titles:
+                    has_screen = True
+
+        # 2. Accessibility Check
         has_acc = ApplicationServices.AXIsProcessTrusted()
         
         if has_screen and has_acc:
@@ -776,6 +791,11 @@ class TranslatorApp(QWidget):
         
         perm_lay.addStretch()
 
+        self.btn_force_continue = QPushButton("Continue Anyway (If permissions are granted)")
+        self.btn_force_continue.setStyleSheet("background: transparent; color: #555; font-size: 9px; border: none;")
+        self.btn_force_continue.clicked.connect(lambda: self.stack.setCurrentIndex(0))
+        perm_lay.addWidget(self.btn_force_continue)
+        
         self.perm_footer_lbl = QLabel("...")
         self.perm_footer_lbl.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.perm_footer_lbl.setStyleSheet("font-size: 9px; color: #666; font-style: italic;")
@@ -1153,6 +1173,7 @@ class TranslatorApp(QWidget):
         self.perm_footer_lbl.setText(t.get("perm_footer", ""))
         self.btn_quit_perm.setText(t["btn_quit"])
         self.lbl_ui_lang_perm.setText(t["ui_lang"])
+        self.btn_force_continue.setText(t.get("btn_force", "Continue Anyway (If granted)"))
         self.lbl_speed_text.setText(t["scan_speed"])
         
         # Sync Log Panel Language
