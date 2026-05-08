@@ -15,7 +15,7 @@ echo "------------------------------------------------"
 rm -rf build dist "$DMG_NAME"
 
 # Derleme / Build
-pyinstaller "$SPEC_FILE"
+./venv/bin/pyinstaller "$SPEC_FILE"
 
 if [ ! -d "dist/$APP_NAME.app" ]; then
     echo "HATA / ERROR: Derleme başarısız oldu! / Build failed!"
