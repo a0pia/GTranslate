@@ -513,8 +513,8 @@ class TranslatorApp(QWidget):
         self._level_set = False
         self._setup_tray()
         
-        # Check macOS permissions on startup silently
-        self._check_and_update_permissions()
+        # Always show main UI - don't block with permission gate
+        self.stack.setCurrentIndex(0)
 
         # --- Native macOS Popover Behavior ---
         try:
@@ -595,44 +595,18 @@ class TranslatorApp(QWidget):
 
     def _check_and_update_permissions(self):
         """
-        Checks macOS permissions with a REAL test instead of the broken
-        CGPreflightScreenCaptureAccess() API which returns False even when
-        permission is granted on macOS Sonoma/Sequoia.
+        Checks permission status SILENTLY using only CGPreflightScreenCaptureAccess.
+        Never calls capture APIs which would trigger the native dialog.
+        Shows a non-blocking status bar message if permission appears missing.
+        The main UI is always accessible regardless of this check.
         """
-        import subprocess, tempfile, os
-
-        # --- Real Screen Recording Test ---
-        # Actually attempt a 1x1 capture. If it works, we have permission.
-        tmp = tempfile.mktemp(suffix=".png")
-        has_screen = False
-        try:
-            result = subprocess.run(
-                ['/usr/sbin/screencapture', '-x', '-R', '0,0,1,1', tmp],
-                capture_output=True, timeout=3
-            )
-            if result.returncode == 0 and os.path.exists(tmp) and os.path.getsize(tmp) > 0:
-                has_screen = True
-        except Exception:
-            has_screen = False
-        finally:
-            try:
-                if os.path.exists(tmp):
-                    os.remove(tmp)
-            except Exception:
-                pass
-
-        # --- Accessibility Test ---
-        import ApplicationServices
-        has_acc = ApplicationServices.AXIsProcessTrusted()
-
-        if has_screen and has_acc:
-            self.perm_action.setVisible(False)
-            self.stack.setCurrentIndex(0)  # Show main UI
-        else:
-            t = self.i18n[self.current_ui_lang]
-            self.perm_action.setVisible(True)
-            self.perm_action.setText(t.get("perm_title", "Permission Required"))
-            self.stack.setCurrentIndex(1)  # Show permission page
+        import Quartz
+        has_screen = Quartz.CGPreflightScreenCaptureAccess()
+        if not has_screen:
+            self.update_status("Ekran Kaydi izni gerekli - Tray menusunden ayarlari acin")
+        # Always stay on main UI - no blocking
+        self.stack.setCurrentIndex(0)
+        self.perm_action.setVisible(False)
 
     def _open_system_settings(self):
         """Opens macOS System Settings directly to Screen Recording."""

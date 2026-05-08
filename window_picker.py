@@ -11,33 +11,10 @@ import tempfile
 
 def check_and_request_permission():
     """
-    Tests Screen Recording permission by actually attempting a capture.
-    CGPreflightScreenCaptureAccess() is broken on macOS Sonoma/Sequoia.
+    Checks Screen Recording permission using CGPreflightScreenCaptureAccess.
+    This NEVER triggers the system dialog - safe to call anytime.
     """
-    tmp = tempfile.mktemp(suffix=".png")
-    try:
-        display_id = Quartz.CGMainDisplayID()
-        # Create a tiny 1x1 crop to test
-        image = Quartz.CGDisplayCreateImageForRect(
-            display_id,
-            Quartz.CGRectMake(0, 0, 1, 1)
-        )
-        if image is None:
-            return False
-        url = NSURL.fileURLWithPath_(tmp)
-        dest = Quartz.CGImageDestinationCreateWithURL(url, 'public.png', 1, None)
-        if dest:
-            Quartz.CGImageDestinationAddImage(dest, image, None)
-            Quartz.CGImageDestinationFinalize(dest)
-        return os.path.exists(tmp) and os.path.getsize(tmp) > 0
-    except Exception:
-        return False
-    finally:
-        try:
-            if os.path.exists(tmp):
-                os.remove(tmp)
-        except Exception:
-            pass
+    return Quartz.CGPreflightScreenCaptureAccess()
 
 
 def _capture_display_to_file(output_path: str) -> bool:
