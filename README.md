@@ -1,66 +1,74 @@
 # GTranslate - Real-time Screen Translation Tool 🌍
 
-**GTranslate**, macOS işletim sistemi için geliştirilmiş, ekran üzerindeki metinleri (oyunlar, videolar, dokümanlar) gerçek zamanlı olarak yakalayıp istediğiniz dile çeviren modern ve şık bir araçtır.
+**GTranslate** is a modern, high-performance tool for macOS that captures and translates on-screen text (games, videos, documents) in real-time. Built with a sleek "Midnight Gold" aesthetic, it feels like a native part of your macOS workspace.
+
+*(TR: GTranslate, macOS için geliştirilmiş, ekran üzerindeki metinleri gerçek zamanlı olarak yakalayıp istediğiniz dile çeviren modern bir araçtır.)*
 
 ---
 
-## 🚀 Özellikler / Features
+## 🚀 Key Features
 
-- **Apple Vision OCR:** macOS'in yerleşik yapay zekasını kullanarak yüksek doğrulukta metin tanıma.
-- **Gerçek Zamanlı Çeviri:** Google Translate (deep-translator) altyapısı ile anlık çeviri.
-- **Modern Arayüz:** "Midnight Gold" temalı, macOS yerel uygulaması hissi veren tasarım.
-- **Akıllı Gizleme (Auto-Hide):** Menü çubuğu odağı kaybettiğinde otomatik olarak gizlenir.
-- **Çeviri Günlüğü (Log Panel):** Geçmiş çevirileri renk kodları ve konuşmacı ayrımı ile takip edin.
-- **Sabitleme (Pin):** Günlük panelini ekranın istediğiniz yerinde her zaman üstte tutun.
+- **Apple Vision OCR:** High-accuracy text recognition using native macOS AI.
+- **Real-time Translation:** Instant results powered by Google Translate (via deep-translator).
+- **Premium UI:** "Midnight Gold" dark mode design with smooth animations.
+- **Smart Auto-Hide:** Automatically retracts to the menu bar when focus is lost.
+- **Translation Log:** Persistent panel to track dialogue history with speaker color-coding.
+- **Pin Capability:** Keep the translation log "Always on Top" with a single click.
 
 ---
 
-## 🛠 Kurulum / Installation
+## 🛠 Installation & Setup (Kurulum)
 
-### 1. Gereksinimler / Prerequisites
-- macOS (Apple Vision API desteği için)
+### 1. Clone the Project (Projeyi İndir)
+Open your terminal and run / Terminali açın ve şu komutları girin:
+```bash
+git clone https://github.com/a0pia/GTranslate.git
+cd GTranslate
+```
+
+### 2. Prerequisites (Gereksinimler)
+- macOS (Required for Apple Vision API)
 - Python 3.9+
 
-### 2. Kütüphaneleri Yükle / Install Dependencies
-Terminal üzerinden şu komutu çalıştırın:
+### 3. Install Dependencies (Kütüphaneleri Yükle)
 ```bash
 pip install -r requirements.txt
 ```
 
 ---
 
-## 🏃 Çalıştırma / Running
+## 🏃 Running the App (Çalıştırma)
 
-Uygulamayı başlatmak için:
+To start the application / Uygulamayı başlatmak için:
 ```bash
 python3 main.py
 ```
-Veya projedeki `baslat.command` dosyasına çift tıklayarak çalıştırabilirsiniz.
+Alternatively, you can double-click the `baslat.command` file in the project folder.
 
 ---
 
-## 📦 Paketleme / Building (.app)
+## 📦 Building a Standalone App (.app)
 
-Uygulamayı tek bir macOS paketi (.app) haline getirmek için:
+To package the project into a native macOS `.app`:
 ```bash
 pyinstaller GTranslate.spec
 ```
-İşlem bittiğinde `dist/GTranslate.app` dosyası hazır olacaktır.
+The finished package will be located in the `dist/GTranslate.app` folder.
 
 ---
 
-## 📋 Kullanım Klavuzu / Usage Guide
+## 📋 Usage Guide (Kullanım Kılavuzu)
 
-1.  **Pencere Seç:** Çevirmek istediğiniz uygulama penceresini listeden seçin.
-2.  **Bölge Belirle:** "Bölge Seç" butonuna basarak ekranın hangi kısmının çevrileceğini fare ile işaretleyin.
-3.  **Dili Ayarla:** Hedef dili seçin ve "Çeviriyi Başlat" butonuna basın.
-4.  **İpucu:** Menü açıldığında başka bir yere tıklarsanız otomatik olarak menü barın içine gizlenir. Günlük panelini sabitlemek için panel üzerindeki "Sabitle" butonunu kullanabilirsiniz.
-
----
-
-## 📄 Lisans / License
-Bu proje MIT lisansı ile korunmaktadır.
+1.  **Select Window:** Pick the application window you want to translate.
+2.  **Pick Region:** Click "Pick Region" and draw a rectangle over the area you want to scan.
+3.  **Start:** Select your target language and click "Start Translation".
+4.  **Pro Tip:** Click anywhere outside the menu to hide it. Use the "Pin" button on the log panel to keep your translations visible while you play or work.
 
 ---
 
-*Geliştirici: [GitHub Kullanıcı Adınız]*
+## 📄 License
+This project is licensed under the MIT License.
+
+---
+
+*Developed by: [a0pia](https://github.com/a0pia)*
