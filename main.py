@@ -601,20 +601,17 @@ class TranslatorApp(QWidget):
         import Quartz
         import ApplicationServices
         
-        # 1. Screen Recording Check (Multiple strategies)
         has_screen = Quartz.CGPreflightScreenCaptureAccess()
         
-        # Fallback: try to see if we can read window names
+        # Fallback: check window titles
         if not has_screen:
             options = Quartz.kCGWindowListOptionOnScreenOnly
             window_list = Quartz.CGWindowListCopyWindowInfo(options, Quartz.kCGNullWindowID)
             if window_list:
-                # If we see any window with a title, we likely have permission
                 has_titles = any(w.get('kCGWindowName') for w in window_list if w.get('kCGWindowLayer') == 0)
                 if has_titles:
                     has_screen = True
 
-        # 2. Accessibility Check
         has_acc = ApplicationServices.AXIsProcessTrusted()
         
         if has_screen and has_acc:
@@ -1126,24 +1123,6 @@ class TranslatorApp(QWidget):
             self.region_lbl.setStyleSheet("color:#f1c40f; font-size:10px;")
             self._reset_cache()
             self.save_config()
-
-    def _show_permission_warning(self):
-        msg = QMessageBox(self)
-        msg.setIcon(QMessageBox.Icon.Warning)
-        msg.setWindowTitle("İzin Gerekli")
-        msg.setText("Uygulamanın çalışması için 'Ekran Kaydı' izni gerekiyor.")
-        msg.setInformativeText(
-            "Lütfen Sistem Ayarları'nı açın ve bu uygulamaya (veya Terminal'e) izin verin.\n\n"
-            "İzin verdikten sonra uygulamayı yeniden başlatmanız gerekebilir."
-        )
-        btn_settings = msg.addButton("Ayarları Aç", QMessageBox.ButtonRole.ActionRole)
-        msg.addButton("Tamam", QMessageBox.ButtonRole.AcceptRole)
-        
-        msg.exec()
-        
-        if msg.clickedButton() == btn_settings:
-            import subprocess
-            subprocess.run(["open", "x-apple.systempreferences:com.apple.preference.security?Privacy_ScreenCapture"])
 
     def retranslate_ui(self):
         t = self.i18n[self.current_ui_lang]
