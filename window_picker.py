@@ -142,29 +142,13 @@ def get_open_windows():
 
 
 def capture_window(window_info, output_path="win_capture.png"):
-    """
-    Captures a specific window's content:
-    1. Takes a full display screenshot using CGDisplayCreateImage
-    2. Crops precisely to the window's screen bounds
-    This gives us just the window's content for the region picker.
-    """
+    """Captures a screen region using CGDisplayCreateImage (full screen crop)."""
     abs_path = os.path.abspath(output_path)
     x, y, w, h = window_info['bounds']
     region = {"left": x, "top": y, "width": w, "height": h}
-
-    # Full display → crop to window
-    tmp_full = abs_path + "_full.png"
-    try:
-        if _capture_display_to_file(tmp_full):
-            if _crop_image(tmp_full, x, y, w, h, abs_path):
-                return abs_path, region
-    finally:
-        try:
-            if os.path.exists(tmp_full):
-                os.remove(tmp_full)
-        except Exception:
-            pass
-
+    result = fast_capture_region(region, abs_path)
+    if result:
+        return abs_path, region
     print(f"[capture_window] Capture failed for window {window_info.get('id')}")
     return None, None
 

@@ -94,39 +94,39 @@ class RegionPickerDialog(QDialog):
         QTimer.singleShot(150, self._take_screenshot)
 
     def _take_screenshot(self):
-        tmp = REGION_TMP_PATH
-        img_path, _ = capture_window(self.window_info, tmp)
-        if not img_path or not os.path.exists(img_path):
-            self.update_status("Ekran goruntüsü alinamadi. Lutfen izinleri kontrol edin.")
+        """Captures the full screen and displays it for region selection."""
+        import tempfile
+        from window_picker import _capture_display_to_file
+        tmp = tempfile.mktemp(suffix=".png")
+        if not _capture_display_to_file(tmp):
             self.reject()
             return
 
-        px = QPixmap(img_path)
+        px = QPixmap(tmp)
+        try:
+            os.remove(tmp)
+        except Exception:
+            pass
+
         if px.isNull():
-            QMessageBox.warning(self, "Hata", "Ekran görüntüsü yüklenemedi.")
             self.reject()
             return
 
-        screen  = QApplication.primaryScreen().geometry()
-        max_w   = int(screen.width()  * 0.80)
-        max_h   = int(screen.height() * 0.80)
-        scaled  = px.scaled(max_w, max_h,
-                             Qt.AspectRatioMode.KeepAspectRatio,
-                             Qt.TransformationMode.SmoothTransformation)
+        screen = QApplication.primaryScreen().geometry()
+        max_w  = int(screen.width()  * 0.95)
+        max_h  = int(screen.height() * 0.90)
+        scaled = px.scaled(max_w, max_h,
+                           Qt.AspectRatioMode.KeepAspectRatio,
+                           Qt.TransformationMode.SmoothTransformation)
         self._img_label.setPixmap(scaled)
         self._img_label.setFixedSize(scaled.size())
         self.adjustSize()
 
-        wx, wy, ww, wh = self.window_info['bounds']
-        self._win_x   = wx
-        self._win_y   = wy
-        self._scale_x = ww / scaled.width()
-        self._scale_y = wh / scaled.height()
-
-        try:
-            os.remove(img_path)
-        except Exception:
-            pass
+        # Map dialog coords → real screen coords
+        self._win_x   = 0
+        self._win_y   = 0
+        self._scale_x = screen.width()  / scaled.width()
+        self._scale_y = screen.height() / scaled.height()
 
     def mousePressEvent(self, e):
         if e.button() == Qt.MouseButton.LeftButton and self._img_label.pixmap():
