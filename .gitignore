@@ -1,0 +1,13 @@
+venv/
+__pycache__/
+build/
+dist/
+*.app/
+.DS_Store
+config.json
+*.png
+*.jpg
+*.jpeg
+*.spec
+# Sadece GTranslate.spec kalsin digerlerini silersek
+!GTranslate.spec
