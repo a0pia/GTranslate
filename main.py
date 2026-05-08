@@ -196,16 +196,20 @@ class TranslatorApp(QWidget):
         self.i18n = {
             "tr": {
                 "title": "GTranslate", "step1": "1. Pencere seç:", "step2": "2. Bölge seç:", "step3": "3. Hedef dil:",
-                "desc_lang": "Çevirinin yapılmasını istediğiniz dili seçin.", "btn_start": "Çeviriyi Başlat",
-                "btn_stop": "Durdur", "btn_log": "Günlük Panelini Aç/Kapat", "btn_hide": "Paneli Gizle",
-                "btn_quit": "Tamamen Kapat", "status_ready": "Hazır.", "status_processing": "Çevriliyor...",
+                "desc_lang": "Çevirinin yapılacağı dili seçin.", "btn_start": "Çeviriyi Başlat",
+                "btn_stop": "Durdur", "btn_log": "Log Paneli Aç/Kapat", "btn_hide": "Paneli Gizle",
+                "btn_quit": "Uygulamadan Çık", "status_ready": "Hazır.", "status_processing": "Çeviriliyor...",
                 "status_stopped": "Durduruldu.", "error_no_win": "HATA: Pencere seçilmedi!",
                 "save_hint": "Bölge İsmi:", "save_confirm": "Kaydet ve Kapat", "ui_lang": "Dil:",
                 "btn_clear_reg": "Bölgeyi Temizle", "scan_speed": "Tarama Hızı:", "delete": "Sil", "save": "S",
                 "region_not_selected": "Bölge: Seçilmedi", "region_full": "Bölge: Tüm Pencere",
-                "auto_selected": "Otomatik seçildi", "refresh": "Pencereleri Yenile", "pick_reg": "Pencereden Bölge Seç",
+                "auto_selected": "Otomatik seçildi", "refresh": "Pencereleri Yenile", "pick_reg": "Bölge Seç",
                 "saved_regs_placeholder": "-- Kayıtlı Bölgeler --", "region_label": "Bölge",
-                "pin": "Sabitle", "pinned": "Sabit"
+                "pin": "Sabitle", "pinned": "Sabitlendi",
+                "perm_title": "Ekran Kaydı İzni Gerekli",
+                "perm_desc": "GTranslate'in ekranınızdaki metinleri okuyup çevirebilmesi için 'Ekran Kaydı' iznine ihtiyacı vardır.\n\nBu izin sadece metin tanıma (OCR) için kullanılır. Verileriniz asla kaydedilmez veya paylaşılmaz.",
+                "perm_btn": "Sistem Ayarlarını Aç",
+                "perm_footer": "İzin verdikten sonra uygulamayı yeniden başlatmanız gerekebilir."
             },
             "en": {
                 "title": "GTranslate", "step1": "1. Select Window:", "step2": "2. Select Region:", "step3": "3. Target Language:",
@@ -218,7 +222,11 @@ class TranslatorApp(QWidget):
                 "region_not_selected": "Region: Not Selected", "region_full": "Region: Full Window",
                 "auto_selected": "Auto-selected", "refresh": "Refresh Windows", "pick_reg": "Pick Region",
                 "saved_regs_placeholder": "-- Saved Regions --", "region_label": "Region",
-                "pin": "Pin", "pinned": "Pinned"
+                "pin": "Pin", "pinned": "Pinned",
+                "perm_title": "Screen Recording Required",
+                "perm_desc": "GTranslate needs 'Screen Recording' permission to capture and translate text from other windows.\n\nThis is only used for text recognition (OCR). Your data is never saved or shared.",
+                "perm_btn": "Open System Settings",
+                "perm_footer": "You might need to restart the app after granting permission."
             },
             "de": {
                 "title": "GTranslate", "step1": "1. Fenster wählen:", "step2": "2. Bereich wählen:", "step3": "3. Zielsprache:",
@@ -231,7 +239,11 @@ class TranslatorApp(QWidget):
                 "region_not_selected": "Bereich: Nicht ausgewählt", "region_full": "Bereich: Ganzes Fenster",
                 "auto_selected": "Automatisch ausgewählt", "refresh": "Fenster aktualisieren", "pick_reg": "Bereich wählen",
                 "saved_regs_placeholder": "-- Gespeicherte Bereiche --", "region_label": "Bereich",
-                "pin": "Fixieren", "pinned": "Fixiert"
+                "pin": "Fixieren", "pinned": "Fixiert",
+                "perm_title": "Bildschirmaufnahme erforderlich",
+                "perm_desc": "GTranslate benötigt die Berechtigung 'Bildschirmaufnahme', um Text aus anderen Fenstern zu erfassen und zu übersetzen.\n\nDies wird nur für die Texterkennung (OCR) verwendet. Ihre Daten werden niemals gespeichert oder geteilt.",
+                "perm_btn": "Systemeinstellungen öffnen",
+                "perm_footer": "Möglicherweise müssen Sie die App nach der Erteilung der Berechtigung neu starten."
             },
             "fr": {
                 "title": "GTranslate", "step1": "1. Choisir la fenêtre:", "step2": "2. Choisir la région:", "step3": "3. Langue cible:",
@@ -244,7 +256,11 @@ class TranslatorApp(QWidget):
                 "region_not_selected": "Région: Non sélectionnée", "region_full": "Région: Fenêtre entière",
                 "auto_selected": "Sélectionné automatiquement", "refresh": "Actualiser les fenêtres", "pick_reg": "Choisir la région",
                 "saved_regs_placeholder": "-- Régions enregistrées --", "region_label": "Région",
-                "pin": "Épingler", "pinned": "Épinglé"
+                "pin": "Épingler", "pinned": "Épinglé",
+                "perm_title": "Enregistrement de l'écran requis",
+                "perm_desc": "GTranslate a besoin de l'autorisation 'Enregistrement de l'écran' pour capturer et traduire le texte d'autres fenêtres.\n\nCeci est uniquement utilisé pour la reconnaissance de texte (OCR). Vos données ne sont jamais enregistrées ou partagées.",
+                "perm_btn": "Ouvrir les paramètres système",
+                "perm_footer": "Vous devrez peut-être redémarrer l'application après avoir accordé l'autorisation."
             },
             "it": {
                 "title": "GTranslate", "step1": "1. Scegli finestra:", "step2": "2. Scegli regione:", "step3": "3. Lingua target:",
@@ -259,9 +275,9 @@ class TranslatorApp(QWidget):
                 "saved_regs_placeholder": "-- Regioni salvate --", "region_label": "Regione",
                 "pin": "Fissa", "pinned": "Fissato",
                 "perm_title": "Registrazione schermo richiesta",
-                "perm_desc": "GTranslate ha bisogno del permesso 'Registrazione schermo' per acquisire e tradurre il testo da altre finestre.\n\n⚠️ Viene utilizzato solo per il riconoscimento del testo (OCR). I tuoi dati non vengono mai salvati o condivisi.",
+                "perm_desc": "GTranslate ha bisogno del permesso 'Registrazione schermo' per acquisire e tradurre il testo da altre finestre.\n\nViene utilizzato solo per il riconoscimento del testo (OCR). I tuoi dati non vengono mai salvati o condivisi.",
                 "perm_btn": "Apri Impostazioni di Sistema",
-                "perm_footer": "Potrebbe essere necessario riavviare l'app dopo aver concesso il permesso."
+                "perm_footer": "Potrebbe essere necesario riavviare l'app dopo aver concesso il permesso."
             },
             "es": {
                 "title": "GTranslate", "step1": "1. Seleccionar ventana:", "step2": "2. Seleccionar región:", "step3": "3. Idioma de destino:",
@@ -273,10 +289,10 @@ class TranslatorApp(QWidget):
                 "btn_clear_reg": "Borrar región", "scan_speed": "Velocidad de escaneo:", "delete": "Eliminar", "save": "G",
                 "region_not_selected": "Región: No seleccionada", "region_full": "Región: Ventana completa",
                 "auto_selected": "Seleccionado automáticamente", "refresh": "Actualizar ventanas", "pick_reg": "Elegir región",
-                "saved_regs_placeholder": "-- Regiones guardadas --", "region_label": "Región",
+                "saved_regs_placeholder": "-- Regiones guardadas --", "region_label": "Regione",
                 "pin": "Fijar", "pinned": "Fijado",
                 "perm_title": "Se requiere grabación de pantalla",
-                "perm_desc": "GTranslate necesita permiso de 'Grabación de pantalla' para capturar y traducir texto de otras ventanas.\n\n⚠️ Esto solo se usa para el reconocimiento de texto (OCR). Sus datos nunca se guardan ni se comparten.",
+                "perm_desc": "GTranslate necesita permiso de 'Grabación de pantalla' para capturar y traducir texto de otras ventanas.\n\nEsto solo se usa para el reconocimiento de texto (OCR). Sus datos nunca se guardan ni se comparten.",
                 "perm_btn": "Abrir configuración del sistema",
                 "perm_footer": "Es posible que deba reiniciar la aplicación después de otorgar el permiso."
             },
@@ -293,7 +309,7 @@ class TranslatorApp(QWidget):
                 "saved_regs_placeholder": "-- Сохраненные области --", "region_label": "Область",
                 "pin": "Закрепить", "pinned": "Закреплено",
                 "perm_title": "Требуется запись экрана",
-                "perm_desc": "GTranslate требуется разрешение на «Запись экрана» для захвата и перевода текста из других окон.\n\n⚠️ Это используется только для распознавания текста (OCR). Ваши данные никогда не сохраняются и не передаются.",
+                "perm_desc": "GTranslate требуется разрешение на «Запись экрана» для захвата и перевода текста из других окон.\n\nЭто используется только для распознавания текста (OCR). Ваши данные никогда не сохраняются и не передаются.",
                 "perm_btn": "Открыть системные настройки",
                 "perm_footer": "Возможно, вам потребуется перезапустить приложение после предоставления разрешения."
             },
@@ -310,7 +326,7 @@ class TranslatorApp(QWidget):
                 "saved_regs_placeholder": "-- 保存された範囲 --", "region_label": "範囲",
                 "pin": "固定", "pinned": "固定済み",
                 "perm_title": "画面収録の許可が必要です",
-                "perm_desc": "GTranslateが他のウィンドウからテキストを読み取って翻訳するには、「画面収録」の許可が必要です。\n\n⚠️ これはテキスト認識（OCR）のみに使用されます。データが保存または共有されることはありません。",
+                "perm_desc": "GTranslateが他のウィンドウからテキストを読み取って翻訳するには、「画面収録」の許可が必要です。\n\nこれはテキスト認識（OCR）のみに使用されます。データが保存または共有されることはありません。",
                 "perm_btn": "システム設定を開く",
                 "perm_footer": "許可を与えた後、アプリの再起動が必要になる場合があります。"
             },
@@ -327,7 +343,7 @@ class TranslatorApp(QWidget):
                 "saved_regs_placeholder": "-- 저장된 영역 --", "region_label": "영역",
                 "pin": "고정", "pinned": "고정됨",
                 "perm_title": "화면 기록 권한 필요",
-                "perm_desc": "GTranslate가 다른 창에서 텍스트를 캡처하고 번역하려면 '화면 기록' 권한이 필요합니다.\n\n⚠️ 이는 텍스트 인식(OCR)에만 사용됩니다. 데이터는 절대 저장되거나 공유되지 않습니다.",
+                "perm_desc": "GTranslate가 다른 창에서 텍스트를 캡처하고 번역하려면 '화면 기록' 권한이 필요합니다.\n\n이는 텍스트 인식(OCR)에만 사용됩니다. 데이터는 절대 저장되거나 공유되지 않습니다.",
                 "perm_btn": "시스템 설정 열기",
                 "perm_footer": "권한을 허용한 후 앱을 재시작해야 할 수도 있습니다."
             },
@@ -344,7 +360,7 @@ class TranslatorApp(QWidget):
                 "saved_regs_placeholder": "-- 已保存区域 --", "region_label": "区域",
                 "pin": "固定", "pinned": "已固定",
                 "perm_title": "需要屏幕录制权限",
-                "perm_desc": "GTranslate 需要“屏幕录制”权限才能从其他窗口抓取并翻译文本。\n\n⚠️ 这仅用于文本识别 (OCR)。您的数据绝不会被保存或共享。",
+                "perm_desc": "GTranslate 需要“屏幕录制”权限才能从其他窗口抓取并翻译文本。\n\n这仅用于文本识别 (OCR)。您的数据绝不会被保存或共享。",
                 "perm_btn": "打开系统设置",
                 "perm_footer": "授予权限后，您可能需要重新启动应用程序。"
             }
@@ -497,10 +513,8 @@ class TranslatorApp(QWidget):
         self._build_ui()
         self._level_set = False
         
-        # Check macOS Screen Recording permissions on startup
-        if not check_and_request_permission():
-            self.update_status("Ekran Kaydi izni eksik!")
-            QTimer.singleShot(1000, self._show_permission_warning)
+        # Check macOS permissions on startup silently
+        self._check_and_update_permissions()
 
         # --- Native macOS Popover Behavior ---
         try:
@@ -565,7 +579,7 @@ class TranslatorApp(QWidget):
         self.tray_menu = QMenu()
         
         # -- Permission Check Section --
-        self.perm_action = QAction("⚠️ İzin Gerekiyor / Permission Required", self)
+        self.perm_action = QAction("Permission Required", self)
         self.perm_action.setVisible(False) # Default hidden
         self.perm_action.triggered.connect(self._open_system_settings)
         self.tray_menu.addAction(self.perm_action)
@@ -586,38 +600,16 @@ class TranslatorApp(QWidget):
         import Quartz
         import ApplicationServices
         
-        # 1. Screen Recording Check
-        # Robust check: try a dummy 1x1 capture
         has_screen = Quartz.CGPreflightScreenCaptureAccess()
-        
-        # 2. Accessibility Check
         has_acc = ApplicationServices.AXIsProcessTrusted()
         
-        # Update UI Labels
-        t = self.i18n[self.current_ui_lang]
-        scr_text = "🎥 Ekran Kaydı / Screen Recording: "
-        acc_text = "🖱 Erişilebilirlik / Accessibility: "
-        
-        if has_screen:
-            self.status_screen.setText(f"{scr_text} ✅")
-            self.status_screen.setStyleSheet("color: #2ecc71; font-weight: bold;")
-        else:
-            self.status_screen.setText(f"{scr_text} ❌")
-            self.status_screen.setStyleSheet("color: #e74c3c; font-weight: bold;")
-
-        if has_acc:
-            self.status_acc.setText(f"{acc_text} ✅")
-            self.status_acc.setStyleSheet("color: #2ecc71; font-weight: bold;")
-        else:
-            self.status_acc.setText(f"{acc_text} ❌")
-            self.status_acc.setStyleSheet("color: #e74c3c; font-weight: bold;")
-            
         if has_screen and has_acc:
             self.perm_action.setVisible(False)
             self.stack.setCurrentIndex(0) # Show normal UI
         else:
+            t = self.i18n[self.current_ui_lang]
             self.perm_action.setVisible(True)
-            self.perm_action.setText("⚠️ " + t.get("perm_title", "Permission Required"))
+            self.perm_action.setText(t.get("perm_title", "Permission Required"))
             self.stack.setCurrentIndex(1) # Show permission page
 
     def _open_system_settings(self):
@@ -745,7 +737,7 @@ class TranslatorApp(QWidget):
         perm_lay.setContentsMargins(15, 15, 15, 15)
         perm_lay.setSpacing(12)
 
-        # Header controls for permission page
+        # Header controls for permission page (Clean version)
         perm_header = QHBoxLayout()
         self.lbl_ui_lang_perm = QLabel("Dil:")
         self.lbl_ui_lang_perm.setStyleSheet("font-size: 9px; color: #777;")
@@ -760,11 +752,6 @@ class TranslatorApp(QWidget):
         perm_header.addStretch()
         perm_lay.addLayout(perm_header)
         
-        icon_lbl = QLabel("⚠️")
-        icon_lbl.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        icon_lbl.setStyleSheet("font-size: 32px; margin-top: 5px;")
-        perm_lay.addWidget(icon_lbl)
-        
         self.perm_title_lbl = QLabel("Permission Required")
         self.perm_title_lbl.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.perm_title_lbl.setStyleSheet("font-size: 14px; font-weight: 800; color: #f1c40f;")
@@ -776,23 +763,14 @@ class TranslatorApp(QWidget):
         self.perm_desc_lbl.setStyleSheet("font-size: 10px; color: #ccc; line-height: 1.3;")
         perm_lay.addWidget(self.perm_desc_lbl)
 
-        # Status Indicators
-        status_box = QWidget()
-        status_box.setStyleSheet("background: rgba(255,255,255,0.03); border-radius: 10px; padding: 10px;")
-        status_lay = QVBoxLayout(status_box)
-        
-        self.status_screen = QLabel("🎥 Ekran Kaydı / Screen Recording: ⏳")
-        self.status_acc = QLabel("🖱 Erişilebilirlik / Accessibility: ⏳")
-        status_lay.addWidget(self.status_screen)
-        status_lay.addWidget(self.status_acc)
-        perm_lay.addWidget(status_box)
+        perm_lay.addStretch()
         
         self.btn_open_perms = QPushButton("Open System Settings")
         self.btn_open_perms.setObjectName("StartBtn")
         self.btn_open_perms.clicked.connect(self._open_system_settings)
         perm_lay.addWidget(self.btn_open_perms)
 
-        self.btn_refresh_perms = QPushButton("🔄 İzinleri Kontrol Et / Check Permissions")
+        self.btn_refresh_perms = QPushButton("Check Permissions")
         self.btn_refresh_perms.setStyleSheet("background: rgba(255,255,255,0.05); font-size: 10px;")
         self.btn_refresh_perms.clicked.connect(self._check_and_update_permissions)
         perm_lay.addWidget(self.btn_refresh_perms)
