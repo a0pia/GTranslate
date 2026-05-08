@@ -11,7 +11,7 @@ from PyQt6.QtWidgets import (
     QApplication, QWidget, QPushButton, QVBoxLayout,
     QLabel, QListWidget, QSlider, QHBoxLayout, QDialog,
     QRubberBand, QMessageBox, QSizePolicy, QComboBox, QInputDialog,
-    QSystemTrayIcon, QMenu, QLineEdit
+    QSystemTrayIcon, QMenu, QLineEdit, QStackedWidget
 )
 from PyQt6.QtCore import (
     Qt, pyqtSignal, QObject, QTimer, QPoint, QRect, QSize, 
