@@ -586,20 +586,39 @@ class TranslatorApp(QWidget):
         import Quartz
         import ApplicationServices
         
-        # 1. Screen Recording Check (Native macOS call via Quartz)
-        # We check if we can actually get a window list with titles
+        # 1. Screen Recording Check
+        # Robust check: try a dummy 1x1 capture
         has_screen = Quartz.CGPreflightScreenCaptureAccess()
         
         # 2. Accessibility Check
         has_acc = ApplicationServices.AXIsProcessTrusted()
         
-        if not has_screen or not has_acc:
-            self.perm_action.setVisible(True)
-            self.perm_action.setText("⚠️ " + self.i18n[self.current_ui_lang].get("perm_title", "Permission Required"))
-            self.stack.setCurrentIndex(1) # Show permission page
+        # Update UI Labels
+        t = self.i18n[self.current_ui_lang]
+        scr_text = "🎥 Ekran Kaydı / Screen Recording: "
+        acc_text = "🖱 Erişilebilirlik / Accessibility: "
+        
+        if has_screen:
+            self.status_screen.setText(f"{scr_text} ✅")
+            self.status_screen.setStyleSheet("color: #2ecc71; font-weight: bold;")
         else:
+            self.status_screen.setText(f"{scr_text} ❌")
+            self.status_screen.setStyleSheet("color: #e74c3c; font-weight: bold;")
+
+        if has_acc:
+            self.status_acc.setText(f"{acc_text} ✅")
+            self.status_acc.setStyleSheet("color: #2ecc71; font-weight: bold;")
+        else:
+            self.status_acc.setText(f"{acc_text} ❌")
+            self.status_acc.setStyleSheet("color: #e74c3c; font-weight: bold;")
+            
+        if has_screen and has_acc:
             self.perm_action.setVisible(False)
             self.stack.setCurrentIndex(0) # Show normal UI
+        else:
+            self.perm_action.setVisible(True)
+            self.perm_action.setText("⚠️ " + t.get("perm_title", "Permission Required"))
+            self.stack.setCurrentIndex(1) # Show permission page
 
     def _open_system_settings(self):
         """Opens macOS System Settings for Privacy & Security."""
@@ -756,6 +775,17 @@ class TranslatorApp(QWidget):
         self.perm_desc_lbl.setWordWrap(True)
         self.perm_desc_lbl.setStyleSheet("font-size: 10px; color: #ccc; line-height: 1.3;")
         perm_lay.addWidget(self.perm_desc_lbl)
+
+        # Status Indicators
+        status_box = QWidget()
+        status_box.setStyleSheet("background: rgba(255,255,255,0.03); border-radius: 10px; padding: 10px;")
+        status_lay = QVBoxLayout(status_box)
+        
+        self.status_screen = QLabel("🎥 Ekran Kaydı / Screen Recording: ⏳")
+        self.status_acc = QLabel("🖱 Erişilebilirlik / Accessibility: ⏳")
+        status_lay.addWidget(self.status_screen)
+        status_lay.addWidget(self.status_acc)
+        perm_lay.addWidget(status_box)
         
         self.btn_open_perms = QPushButton("Open System Settings")
         self.btn_open_perms.setObjectName("StartBtn")
