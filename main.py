@@ -512,6 +512,7 @@ class TranslatorApp(QWidget):
 
         self._build_ui()
         self._level_set = False
+        self._setup_tray()
         
         # Check macOS permissions on startup silently
         self._check_and_update_permissions()
@@ -527,11 +528,9 @@ class TranslatorApp(QWidget):
         self.scan_timer = QTimer()
         self.scan_timer.timeout.connect(self.run_scan)
 
-        # Initialize log panel position (but don't show yet)
+        # Initialize log panel position
         screen = QApplication.primaryScreen().geometry()
         self.log_panel.move(screen.width() - 420, screen.height() - 320)
-
-        self._setup_tray()
 
     def _boost_level(self):
         """Force window to stay on top of other apps on macOS."""
