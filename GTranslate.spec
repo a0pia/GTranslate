@@ -31,7 +31,7 @@ exe = EXE(
     argv_emulation=False,
     target_arch=None,
     codesign_identity=None,
-    entitlements_file=None,
+    entitlements_file='entitlements.plist',
 )
 coll = COLLECT(
     exe,
@@ -49,8 +49,9 @@ app = BUNDLE(
     bundle_identifier='com.gtranslate.pro',
     info_plist={
         'NSHighResolutionCapable': True,
-        'NSScreenCaptureUsageDescription': 'Uygulama ekranındaki metinleri okumak için ekran kaydı iznine ihtiyaç duyar.',
-        'LSBackgroundOnly': False,
+        'NSScreenCaptureUsageDescription': 'Uygulama ekranındaki metinleri okumak ve çevirmek için ekran kaydı iznine ihtiyaç duyar.',
+        'NSAccessibilityUsageDescription': 'Uygulama pencereleri yönetmek ve odaklamak için erişilebilirlik iznine ihtiyaç duyar.',
+        'LSUIElement': True, # Hide from Dock, keep in Menu Bar
         'NSRequiresAquaSystemAppearance': False,
     },
 )
