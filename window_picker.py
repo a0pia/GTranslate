@@ -131,7 +131,7 @@ def capture_window(window_info, output_path="win_capture.png"):
     except Exception:
         pass
 
-    # --- Strategy 2: CGWindowListCreateImage (Truly window-based fallback) ---
+    # --- Strategy 2: CGWindowListCreateImage ---
     image = Quartz.CGWindowListCreateImage(
         Quartz.CGRectNull,
         Quartz.kCGWindowListOptionIncludingWindow,
@@ -144,8 +144,16 @@ def capture_window(window_info, output_path="win_capture.png"):
         if dest:
             Quartz.CGImageDestinationAddImage(dest, image, None)
             if Quartz.CGImageDestinationFinalize(dest):
-                if os.path.exists(abs_path) and os.path.getsize(abs_path) > 10000:
+                if os.path.exists(abs_path) and os.path.getsize(abs_path) > 5000:
                     return abs_path, region
+
+    # --- Strategy 3: Direct Region Capture (Bypass window-locking) ---
+    # This captures the area on screen where the window *should* be
+    try:
+        if fast_capture_region(region, abs_path):
+            return abs_path, region
+    except Exception:
+        pass
 
     # --- Strategy 3: mss (Fast but screen-based) ---
     if _MSS_AVAILABLE:
