@@ -23,6 +23,11 @@ if [ ! -d "dist/$APP_NAME.app" ]; then
 fi
 
 echo "------------------------------------------------"
+echo "1.5 Uygulama İmzalanıyor / Codesigning App..."
+echo "------------------------------------------------"
+codesign --force --deep --options runtime --entitlements entitlements.plist --sign - "dist/$APP_NAME.app"
+
+echo "------------------------------------------------"
 echo "2. DMG Dosyası Oluşturuluyor / Creating DMG..."
 echo "------------------------------------------------"
 
