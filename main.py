@@ -629,9 +629,8 @@ class TranslatorApp(QWidget):
     def _open_system_settings(self):
         """Opens macOS System Settings for Privacy & Security."""
         import subprocess
-        # Opens the Privacy & Security panel directly
+        # Prioritize Screen Recording as requested
         subprocess.run(["open", "x-apple.systempreferences:com.apple.preference.security?Privacy_ScreenCapture"])
-        subprocess.run(["open", "x-apple.systempreferences:com.apple.preference.security?Privacy_Accessibility"])
 
         # Animation setup
         self._anim = QPropertyAnimation(self, b"pos")
