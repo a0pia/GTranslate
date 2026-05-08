@@ -25,7 +25,8 @@ fi
 echo "------------------------------------------------"
 echo "1.5 Uygulama İmzalanıyor / Codesigning App..."
 echo "------------------------------------------------"
-codesign --force --deep --options runtime --entitlements entitlements.plist --sign - "dist/$APP_NAME.app"
+# Using a more flexible signing method for better screen capture compatibility
+codesign --force --deep --sign - "dist/$APP_NAME.app"
 
 echo "------------------------------------------------"
 echo "2. DMG Dosyası Oluşturuluyor / Creating DMG..."

@@ -113,13 +113,28 @@ def get_open_windows():
 def capture_window(window_info, output_path="win_capture.png"):
     """
     Captures a specific window's content using multiple strategies.
+    Priority: 
+    1. mss (Fastest, direct framebuffer - avoids many permission sync issues)
+    2. screencapture -l (Standard macOS window locking)
+    3. CGWindowListCreateImage (Apple API fallback)
     """
     wid = window_info['id']
     abs_path = os.path.abspath(output_path)
     x, y, w, h = window_info['bounds']
     region = {"left": x, "top": y, "width": w, "height": h}
 
-    # --- Strategy 1: screencapture -l <window_id> (BEST for macOS window-locking) ---
+    # --- Strategy 1: mss (Often bypasses 'screencapture' permission sync issues) ---
+    if _MSS_AVAILABLE:
+        try:
+            with mss.mss() as sct:
+                shot = sct.grab(region)
+                mss.tools.to_png(shot.rgb, shot.size, output=abs_path)
+            if os.path.exists(abs_path) and os.path.getsize(abs_path) > 10000:
+                return abs_path, region
+        except Exception:
+            pass
+
+    # --- Strategy 2: screencapture -l <window_id> ---
     try:
         result = subprocess.run(
             ['screencapture', '-l', str(wid), '-x', abs_path],
@@ -131,7 +146,7 @@ def capture_window(window_info, output_path="win_capture.png"):
     except Exception:
         pass
 
-    # --- Strategy 2: CGWindowListCreateImage ---
+    # --- Strategy 3: CGWindowListCreateImage ---
     image = Quartz.CGWindowListCreateImage(
         Quartz.CGRectNull,
         Quartz.kCGWindowListOptionIncludingWindow,
@@ -147,24 +162,8 @@ def capture_window(window_info, output_path="win_capture.png"):
                 if os.path.exists(abs_path) and os.path.getsize(abs_path) > 5000:
                     return abs_path, region
 
-    # --- Strategy 3: Direct Region Capture (Bypass window-locking) ---
-    # This captures the area on screen where the window *should* be
-    try:
-        if fast_capture_region(region, abs_path):
-            return abs_path, region
-    except Exception:
-        pass
-
-    # --- Strategy 3: mss (Fast but screen-based) ---
-    if _MSS_AVAILABLE:
-        try:
-            with mss.mss() as sct:
-                shot = sct.grab(region)
-                mss.tools.to_png(shot.rgb, shot.size, output=abs_path)
-            if os.path.exists(abs_path) and os.path.getsize(abs_path) > 10000:
-                return abs_path, region
-        except Exception as e:
-            print(f"[capture_window] mss fallback failed: {e}")
+    print("HATA: Tum yakalama yontemleri basarisiz oldu.")
+    return None, None
 
     # --- Strategy 4: Full screen → crop to window bounds ---
     tmp_full = abs_path + "_fullscreen.png"
