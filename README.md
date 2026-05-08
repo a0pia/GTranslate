@@ -2,7 +2,15 @@
 
 **GTranslate** is a modern, high-performance tool for macOS that captures and translates on-screen text (games, videos, documents) in real-time. Built with a sleek "Midnight Gold" aesthetic, it feels like a native part of your macOS workspace.
 
-*(TR: GTranslate, macOS için geliştirilmiş, ekran üzerindeki metinleri gerçek zamanlı olarak yakalayıp istediğiniz dile çeviren modern bir araçtır.)*
+---
+
+## 🇹🇷 Türkçe Açıklama
+
+**GTranslate**, özellikle oyun severler ve yabancı dilde içerik tüketen macOS kullanıcıları için geliştirilmiş, ekran üzerindeki metinleri anlık olarak yakalayıp Türkçeye (veya seçtiğiniz diğer dillere) çeviren profesyonel bir araçtır. 
+
+- **Hız:** Apple'ın yerel Vision OCR teknolojisi ile milisaniyeler içinde metin tanıma.
+- **Şıklık:** macOS ekosistemine tam uyumlu, göz yormayan modern tasarım.
+- **Kullanım Kolaylığı:** Menü çubuğundan tek tıkla erişim ve akıllı gizleme özelliği.
 
 ---
 
@@ -66,8 +74,14 @@ The finished package will be located in the `dist/GTranslate.app` folder.
 
 ---
 
-## 📄 License
-This project is licensed under the MIT License.
+## 📄 License (Lisans)
+This project is licensed under the **MIT License**. 
+
+**MIT Lisansı Nedir?**
+Dünyanın en yaygın açık kaynak lisanslarından biridir. Size şu hakları verir:
+- **Özgürlük:** Kodu istediğiniz gibi kullanabilir, kopyalayabilir, değiştirebilir ve satabilirsiniz.
+- **Sorumluluk:** Yazılım "olduğu gibi" sunulur; herhangi bir garanti verilmez.
+- **Koşul:** Lisans dosyasını ve telif hakkı bildirimini korumanız yeterlidir.
 
 ---
 
