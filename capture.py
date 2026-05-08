@@ -1,13 +1,21 @@
-import mss
-import mss.tools
+import subprocess
+import os
 from PyQt6.QtWidgets import QWidget, QRubberBand, QApplication
 from PyQt6.QtCore import QRect, QSize, Qt, QPoint, QEventLoop
-import os
+from PyQt6.QtGui import QScreen
+
 
 class RegionSelector(QWidget):
+    """
+    Transparent full-screen overlay for user to drag-select a region.
+    """
     def __init__(self):
         super().__init__()
-        self.setWindowFlags(Qt.WindowType.FramelessWindowHint | Qt.WindowType.WindowStaysOnTopHint)
+        self.setWindowFlags(
+            Qt.WindowType.FramelessWindowHint |
+            Qt.WindowType.WindowStaysOnTopHint |
+            Qt.WindowType.Tool
+        )
         self.setWindowOpacity(0.3)
         self.setStyleSheet("background-color: black;")
         self.setAttribute(Qt.WidgetAttribute.WA_DeleteOnClose)
@@ -37,7 +45,6 @@ class RegionSelector(QWidget):
         if event.button() == Qt.MouseButton.LeftButton:
             self.rubberBand.hide()
             rect = self.rubberBand.geometry()
-            # Convert screen geometry to mss format (left, top, width, height)
             self.selected_region = {
                 "left": rect.x(),
                 "top": rect.y(),
@@ -46,37 +53,61 @@ class RegionSelector(QWidget):
             }
             self.close()
 
+
 class CaptureManager:
+    """
+    Manages screen region selection and capture.
+    Uses Apple's /usr/sbin/screencapture binary for reliable
+    permission handling in standalone .app bundles.
+    """
     def __init__(self):
-        self.sct = mss.mss()
         self.region = None
 
     def select_region(self):
-        # Eğer zaten bir event loop varsa, yeni bir tane oluşturup bekleyeceğiz
         selector = RegionSelector()
         loop = QEventLoop()
-        
-        # Selector kapandığında loop'u bitir
         selector.destroyed.connect(loop.quit)
-        
         selector.start_selection()
         loop.exec()
-        
         self.region = selector.selected_region
         return self.region
 
     def capture(self, output_path="capture.png"):
+        """
+        Captures the selected region using Apple's screencapture binary.
+        This is the ONLY reliable method for standalone .app bundles.
+        """
         if not self.region:
             print("No region selected!")
             return None
-        
+
+        x = self.region.get('left', 0)
+        y = self.region.get('top', 0)
+        w = self.region.get('width', 100)
+        h = self.region.get('height', 100)
+
+        abs_path = os.path.abspath(output_path)
+
         try:
-            screenshot = self.sct.grab(self.region)
-            mss.tools.to_png(screenshot.rgb, screenshot.size, output=output_path)
-            return output_path
+            result = subprocess.run(
+                [
+                    '/usr/sbin/screencapture',
+                    '-x',                          # no sound
+                    '-R', f'{int(x)},{int(y)},{int(w)},{int(h)}',
+                    abs_path
+                ],
+                capture_output=True,
+                timeout=5
+            )
+            if result.returncode == 0 and os.path.exists(abs_path) and os.path.getsize(abs_path) > 100:
+                return abs_path
+            else:
+                print(f"[CaptureManager] screencapture failed: returncode={result.returncode}, stderr={result.stderr}")
+                return None
         except Exception as e:
-            print(f"Capture Error: {e}")
+            print(f"[CaptureManager] Capture error: {e}")
             return None
+
 
 if __name__ == "__main__":
     import sys

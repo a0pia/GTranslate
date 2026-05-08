@@ -624,12 +624,8 @@ class TranslatorApp(QWidget):
             self.stack.setCurrentIndex(1) # Show permission page
 
     def _open_system_settings(self):
-        """Opens macOS System Settings and explicitly requests access to trigger the OS."""
+        """Opens macOS System Settings directly to Screen Recording."""
         import subprocess
-        import Quartz
-        # Explicitly request access to trigger the system prompt/re-check
-        Quartz.CGRequestScreenCaptureAccess()
-        # Open the Screen Recording privacy pane
         subprocess.run(["open", "x-apple.systempreferences:com.apple.preference.security?Privacy_ScreenCapture"])
 
         # Animation setup
