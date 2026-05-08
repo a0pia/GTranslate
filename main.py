@@ -630,6 +630,9 @@ class TranslatorApp(QWidget):
 
     def show(self):
         """Show window with fade-in and slide-down animation from tray icon."""
+        # Refresh permission status every time we show
+        self._check_and_update_permissions()
+        
         # Position window under tray icon
         tray_rect = self.tray_icon.geometry()
         screen = QApplication.primaryScreen().availableGeometry()
@@ -720,36 +723,61 @@ class TranslatorApp(QWidget):
         # --- PAGE 2: PERMISSION OVERLAY ---
         self.page_perm = QWidget()
         perm_lay = QVBoxLayout(self.page_perm)
-        perm_lay.setContentsMargins(20, 30, 20, 20)
-        perm_lay.setSpacing(15)
+        perm_lay.setContentsMargins(15, 15, 15, 15)
+        perm_lay.setSpacing(12)
+
+        # Header controls for permission page
+        perm_header = QHBoxLayout()
+        self.lbl_ui_lang_perm = QLabel("Dil:")
+        self.lbl_ui_lang_perm.setStyleSheet("font-size: 9px; color: #777;")
+        perm_header.addWidget(self.lbl_ui_lang_perm)
+        
+        self.combo_ui_lang_perm = QComboBox()
+        self.combo_ui_lang_perm.addItems(["Türkçe", "English", "Deutsch", "Français", "Italiano"])
+        self.combo_ui_lang_perm.setFixedWidth(80)
+        self.combo_ui_lang_perm.setStyleSheet("font-size: 9px; height: 18px; padding: 0 4px;")
+        self.combo_ui_lang_perm.currentTextChanged.connect(self._on_ui_lang_changed)
+        perm_header.addWidget(self.combo_ui_lang_perm)
+        perm_header.addStretch()
+        perm_lay.addLayout(perm_header)
         
         icon_lbl = QLabel("⚠️")
         icon_lbl.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        icon_lbl.setStyleSheet("font-size: 48px;")
+        icon_lbl.setStyleSheet("font-size: 32px; margin-top: 5px;")
         perm_lay.addWidget(icon_lbl)
         
         self.perm_title_lbl = QLabel("Permission Required")
         self.perm_title_lbl.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.perm_title_lbl.setStyleSheet("font-size: 16px; font-weight: 800; color: #f1c40f;")
+        self.perm_title_lbl.setStyleSheet("font-size: 14px; font-weight: 800; color: #f1c40f;")
         perm_lay.addWidget(self.perm_title_lbl)
         
         self.perm_desc_lbl = QLabel("...")
         self.perm_desc_lbl.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.perm_desc_lbl.setWordWrap(True)
-        self.perm_desc_lbl.setStyleSheet("font-size: 11px; color: #ccc; line-height: 1.4;")
+        self.perm_desc_lbl.setStyleSheet("font-size: 10px; color: #ccc; line-height: 1.3;")
         perm_lay.addWidget(self.perm_desc_lbl)
         
-        perm_lay.addStretch()
-        
         self.btn_open_perms = QPushButton("Open System Settings")
-        self.btn_open_perms.setObjectName("StartBtn") # Reuse style
+        self.btn_open_perms.setObjectName("StartBtn")
         self.btn_open_perms.clicked.connect(self._open_system_settings)
         perm_lay.addWidget(self.btn_open_perms)
+
+        self.btn_refresh_perms = QPushButton("🔄 İzinleri Kontrol Et / Check Permissions")
+        self.btn_refresh_perms.setStyleSheet("background: rgba(255,255,255,0.05); font-size: 10px;")
+        self.btn_refresh_perms.clicked.connect(self._check_and_update_permissions)
+        perm_lay.addWidget(self.btn_refresh_perms)
         
+        perm_lay.addStretch()
+
         self.perm_footer_lbl = QLabel("...")
         self.perm_footer_lbl.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.perm_footer_lbl.setStyleSheet("font-size: 9px; color: #666; font-style: italic;")
         perm_lay.addWidget(self.perm_footer_lbl)
+        
+        self.btn_quit_perm = QPushButton("Quit App")
+        self.btn_quit_perm.setStyleSheet("background: rgba(231, 76, 60, 0.15); color: #ff7675; font-size:11px;")
+        self.btn_quit_perm.clicked.connect(QApplication.instance().quit)
+        perm_lay.addWidget(self.btn_quit_perm)
         
         self.stack.addWidget(self.page_perm)
 
@@ -949,9 +977,13 @@ class TranslatorApp(QWidget):
                 
                 if hasattr(self, 'combo_ui_lang'):
                     self.combo_ui_lang.blockSignals(True)
+                    self.combo_ui_lang_perm.blockSignals(True)
                     rev_mapping = {"tr": "Türkçe", "en": "English", "de": "Deutsch", "fr": "Français", "it": "Italiano"}
-                    self.combo_ui_lang.setCurrentText(rev_mapping.get(self.current_ui_lang, "English"))
+                    text = rev_mapping.get(self.current_ui_lang, "English")
+                    self.combo_ui_lang.setCurrentText(text)
+                    self.combo_ui_lang_perm.setCurrentText(text)
                     self.combo_ui_lang.blockSignals(False)
+                    self.combo_ui_lang_perm.blockSignals(False)
                     self.retranslate_ui()
                 
                 if hasattr(self, 'combo_lang'):
@@ -1112,6 +1144,8 @@ class TranslatorApp(QWidget):
         self.perm_desc_lbl.setText(t.get("perm_desc", "This app needs screen recording permission to function."))
         self.btn_open_perms.setText(t.get("perm_btn", "Open System Settings"))
         self.perm_footer_lbl.setText(t.get("perm_footer", ""))
+        self.btn_quit_perm.setText(t["btn_quit"])
+        self.lbl_ui_lang_perm.setText(t["ui_lang"])
         self.lbl_speed_text.setText(t["scan_speed"])
         
         # Sync Log Panel Language
