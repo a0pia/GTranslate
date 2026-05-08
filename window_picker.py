@@ -13,23 +13,12 @@ except ImportError:
 
 def check_and_request_permission():
     """
-    Checks if Screen Recording permission is granted (macOS 10.15+).
-    If not, it triggers the system prompt.
-    Returns True if already granted, False if prompt was triggered or not granted.
+    Checks if Screen Recording permission is granted.
+    Does NOT show popups.
     """
-    try:
-        # CGPreflightScreenCaptureAccess: Checks permission without prompting
-        if hasattr(Quartz, 'CGPreflightScreenCaptureAccess'):
-            if Quartz.CGPreflightScreenCaptureAccess():
-                return True
-            else:
-                # CGRequestScreenCaptureAccess: Triggers the system permission dialog
-                # Note: This returns immediately, the user's choice is handled by OS
-                Quartz.CGRequestScreenCaptureAccess()
-                return False
-    except Exception as e:
-        print(f"Permission check error: {e}")
-    return True
+    import Quartz
+    # Just preflight check, no prompts
+    return Quartz.CGPreflightScreenCaptureAccess()
 
 def fast_capture_region(crop_region: dict, output_path: str = "win_capture.png") -> str | None:
     """
