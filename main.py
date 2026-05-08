@@ -258,78 +258,95 @@ class TranslatorApp(QWidget):
                 "auto_selected": "Selezionato automaticamente", "refresh": "Aggiorna finestre", "pick_reg": "Scegli regione",
                 "saved_regs_placeholder": "-- Regioni salvate --", "region_label": "Regione",
                 "pin": "Fissa", "pinned": "Fissato",
-                "perm_title": "Ekran Kaydı İzni Gerekli",
-                "perm_desc": "GTranslate'in ekranınızdaki metinleri okuyup çevirebilmesi için 'Ekran Kaydı' iznine ihtiyacı vardır.\n\n⚠️ Bu izin sadece metin tanıma (OCR) için kullanılır. Verileriniz asla kaydedilmez veya paylaşılmaz.",
-                "perm_btn": "Sistem Ayarlarını Aç",
-                "perm_footer": "İzin verdikten sonra uygulamayı yeniden başlatmanız gerekebilir."
-            },
-            "en": {
-                "title": "GTranslate", "step1": "1. Select Window:", "step2": "2. Select Region:", "step3": "3. Target Language:",
-                "desc_lang": "Choose the language you want to translate into.", "btn_start": "Start Translation",
-                "btn_stop": "Stop", "btn_log": "Open/Close Log Panel", "btn_hide": "Hide Panel",
-                "btn_quit": "Quit App", "status_ready": "Ready.", "status_processing": "Translating...",
-                "status_stopped": "Stopped.", "error_no_win": "ERROR: No window selected!",
-                "save_hint": "Region Name:", "save_confirm": "Save and Close", "ui_lang": "Language:",
-                "btn_clear_reg": "Clear Region", "scan_speed": "Scan Speed:", "delete": "Del", "save": "S",
-                "region_not_selected": "Region: Not Selected", "region_full": "Region: Full Window",
-                "auto_selected": "Auto-selected", "refresh": "Refresh Windows", "pick_reg": "Pick Region",
-                "saved_regs_placeholder": "-- Saved Regions --", "region_label": "Region",
-                "pin": "Pin", "pinned": "Pinned",
-                "perm_title": "Screen Recording Required",
-                "perm_desc": "GTranslate needs 'Screen Recording' permission to capture and translate text from other windows.\n\n⚠️ This is only used for text recognition (OCR). Your data is never saved or shared.",
-                "perm_btn": "Open System Settings",
-                "perm_footer": "You might need to restart the app after granting permission."
-            },
-            "de": {
-                "title": "GTranslate", "step1": "1. Fenster wählen:", "step2": "2. Bereich wählen:", "step3": "3. Zielsprache:",
-                "desc_lang": "Wählen Sie die Sprache für die Übersetzung.", "btn_start": "Übersetzung starten",
-                "btn_stop": "Stoppen", "btn_log": "Log-Panel öffnen/schließen", "btn_hide": "Panel ausblenden",
-                "btn_quit": "Beenden", "status_ready": "Bereit.", "status_processing": "Übersetzen...",
-                "status_stopped": "Gestoppt.", "error_no_win": "FEHLER: Kein Fenster gewählt!",
-                "save_hint": "Bereichsname:", "save_confirm": "Speichern und Schließen", "ui_lang": "Sprache:",
-                "btn_clear_reg": "Bereich löschen", "scan_speed": "Scan-Geschw.:", "delete": "Löschen", "save": "S",
-                "region_not_selected": "Bereich: Nicht ausgewählt", "region_full": "Bereich: Ganzes Fenster",
-                "auto_selected": "Automatisch ausgewählt", "refresh": "Fenster aktualisieren", "pick_reg": "Bereich wählen",
-                "saved_regs_placeholder": "-- Gespeicherte Bereiche --", "region_label": "Bereich",
-                "pin": "Fixieren", "pinned": "Fixiert",
-                "perm_title": "Bildschirmaufnahme erforderlich",
-                "perm_desc": "GTranslate benötigt die Berechtigung 'Bildschirmaufnahme', um Text aus anderen Fenstern zu erfassen und zu übersetzen.\n\n⚠️ Dies wird nur für die Texterkennung (OCR) verwendet. Ihre Daten werden niemals gespeichert oder geteilt.",
-                "perm_btn": "Systemeinstellungen öffnen",
-                "perm_footer": "Möglicherweise müssen Sie die App nach der Erteilung der Berechtigung neu starten."
-            },
-            "fr": {
-                "title": "GTranslate", "step1": "1. Choisir la fenêtre:", "step2": "2. Choisir la région:", "step3": "3. Langue cible:",
-                "desc_lang": "Choisissez la langue de traduction.", "btn_start": "Démarrer la traduction",
-                "btn_stop": "Arrêter", "btn_log": "Ouvrir/Fermer le journal", "btn_hide": "Masquer le panneau",
-                "btn_quit": "Quitter", "status_ready": "Prêt.", "status_processing": "Traduction...",
-                "status_stopped": "Arrêté.", "error_no_win": "ERREUR: Aucune fenêtre sélectionnée!",
-                "save_hint": "Nom de la région:", "save_confirm": "Enregistrer et Fermer", "ui_lang": "Langue:",
-                "btn_clear_reg": "Effacer la région", "scan_speed": "Vitesse scan:", "delete": "Suppr", "save": "S",
-                "region_not_selected": "Région: Non sélectionnée", "region_full": "Région: Fenêtre entière",
-                "auto_selected": "Sélectionné automatiquement", "refresh": "Actualiser les fenêtres", "pick_reg": "Choisir la région",
-                "saved_regs_placeholder": "-- Régions enregistrées --", "region_label": "Région",
-                "pin": "Épingler", "pinned": "Épinglé",
-                "perm_title": "Enregistrement de l'écran requis",
-                "perm_desc": "GTranslate a besoin de l'autorisation 'Enregistrement de l'écran' pour capturer et traduire le texte d'autres fenêtres.\n\n⚠️ Ceci est uniquement utilisé pour la reconnaissance de texte (OCR). Vos données ne sont jamais enregistrées ou partagées.",
-                "perm_btn": "Ouvrir les paramètres système",
-                "perm_footer": "Vous devrez peut-être redémarrer l'application après avoir accordé l'autorisation."
-            },
-            "it": {
-                "title": "GTranslate", "step1": "1. Scegli finestra:", "step2": "2. Scegli regione:", "step3": "3. Lingua target:",
-                "desc_lang": "Scegli la lingua per la traduzione.", "btn_start": "Avvia traduzione",
-                "btn_stop": "Ferma", "btn_log": "Apri/Chiudi log", "btn_hide": "Nascondi pannello",
-                "btn_quit": "Esci", "status_ready": "Pronto.", "status_processing": "Traduzione...",
-                "status_stopped": "Fermato.", "error_no_win": "ERRORE: Nessuna finestra scelta!",
-                "save_hint": "Nome regione:", "save_confirm": "Salva e Chiudi", "ui_lang": "Lingua:",
-                "btn_clear_reg": "Cancella regione", "scan_speed": "Velocità scan:", "delete": "Elimina", "save": "S",
-                "region_not_selected": "Regione: Non selezionata", "region_full": "Regione: Intera finestra",
-                "auto_selected": "Selezionato automaticamente", "refresh": "Aggiorna finestre", "pick_reg": "Scegli regione",
-                "saved_regs_placeholder": "-- Regioni salvate --", "region_label": "Regione",
-                "pin": "Fissa", "pinned": "Fissato",
                 "perm_title": "Registrazione schermo richiesta",
                 "perm_desc": "GTranslate ha bisogno del permesso 'Registrazione schermo' per acquisire e tradurre il testo da altre finestre.\n\n⚠️ Viene utilizzato solo per il riconoscimento del testo (OCR). I tuoi dati non vengono mai salvati o condivisi.",
                 "perm_btn": "Apri Impostazioni di Sistema",
                 "perm_footer": "Potrebbe essere necessario riavviare l'app dopo aver concesso il permesso."
+            },
+            "es": {
+                "title": "GTranslate", "step1": "1. Seleccionar ventana:", "step2": "2. Seleccionar región:", "step3": "3. Idioma de destino:",
+                "desc_lang": "Elija el idioma al que desea traducir.", "btn_start": "Iniciar traducción",
+                "btn_stop": "Detener", "btn_log": "Abrir/Cerrar panel de registro", "btn_hide": "Ocultar panel",
+                "btn_quit": "Salir", "status_ready": "Listo.", "status_processing": "Traduciendo...",
+                "status_stopped": "Detenido.", "error_no_win": "ERROR: ¡No se seleccionó ninguna ventana!",
+                "save_hint": "Nombre de la región:", "save_confirm": "Guardar y cerrar", "ui_lang": "Idioma:",
+                "btn_clear_reg": "Borrar región", "scan_speed": "Velocidad de escaneo:", "delete": "Eliminar", "save": "G",
+                "region_not_selected": "Región: No seleccionada", "region_full": "Región: Ventana completa",
+                "auto_selected": "Seleccionado automáticamente", "refresh": "Actualizar ventanas", "pick_reg": "Elegir región",
+                "saved_regs_placeholder": "-- Regiones guardadas --", "region_label": "Región",
+                "pin": "Fijar", "pinned": "Fijado",
+                "perm_title": "Se requiere grabación de pantalla",
+                "perm_desc": "GTranslate necesita permiso de 'Grabación de pantalla' para capturar y traducir texto de otras ventanas.\n\n⚠️ Esto solo se usa para el reconocimiento de texto (OCR). Sus datos nunca se guardan ni se comparten.",
+                "perm_btn": "Abrir configuración del sistema",
+                "perm_footer": "Es posible que deba reiniciar la aplicación después de otorgar el permiso."
+            },
+            "ru": {
+                "title": "GTranslate", "step1": "1. Выбрать окно:", "step2": "2. Выбрать область:", "step3": "3. Целевой язык:",
+                "desc_lang": "Выберите язык для перевода.", "btn_start": "Начать перевод",
+                "btn_stop": "Остановить", "btn_log": "Открыть/закрыть журнал", "btn_hide": "Скрыть панель",
+                "btn_quit": "Выйти", "status_ready": "Готово.", "status_processing": "Перевод...",
+                "status_stopped": "Остановлено.", "error_no_win": "ОШИБКА: Окно не выбрано!",
+                "save_hint": "Имя области:", "save_confirm": "Сохранить и закрыть", "ui_lang": "Язык:",
+                "btn_clear_reg": "Очистить область", "scan_speed": "Скорость сканирования:", "delete": "Удалить", "save": "С",
+                "region_not_selected": "Область: Не выбрана", "region_full": "Область: Весь экран",
+                "auto_selected": "Выбрано автоматически", "refresh": "Обновить окна", "pick_reg": "Выбрать область",
+                "saved_regs_placeholder": "-- Сохраненные области --", "region_label": "Область",
+                "pin": "Закрепить", "pinned": "Закреплено",
+                "perm_title": "Требуется запись экрана",
+                "perm_desc": "GTranslate требуется разрешение на «Запись экрана» для захвата и перевода текста из других окон.\n\n⚠️ Это используется только для распознавания текста (OCR). Ваши данные никогда не сохраняются и не передаются.",
+                "perm_btn": "Открыть системные настройки",
+                "perm_footer": "Возможно, вам потребуется перезапустить приложение после предоставления разрешения."
+            },
+            "ja": {
+                "title": "GTranslate", "step1": "1. ウィンドウ選択:", "step2": "2. 範囲選択:", "step3": "3. 対象言語:",
+                "desc_lang": "翻訳先の言語を選択してください。", "btn_start": "翻訳開始",
+                "btn_stop": "停止", "btn_log": "ログパネル開閉", "btn_hide": "パネルを隠す",
+                "btn_quit": "終了", "status_ready": "準備完了", "status_processing": "翻訳中...",
+                "status_stopped": "停止中", "error_no_win": "エラー: ウィンドウが選択されていません",
+                "save_hint": "範囲名:", "save_confirm": "保存して閉じる", "ui_lang": "言語:",
+                "btn_clear_reg": "範囲をクリア", "scan_speed": "スキャンスピード:", "delete": "削除", "save": "保存",
+                "region_not_selected": "範囲: 未選択", "region_full": "範囲: ウィンドウ全体",
+                "auto_selected": "自動選択されました", "refresh": "ウィンドウ更新", "pick_reg": "範囲を指定",
+                "saved_regs_placeholder": "-- 保存された範囲 --", "region_label": "範囲",
+                "pin": "固定", "pinned": "固定済み",
+                "perm_title": "画面収録の許可が必要です",
+                "perm_desc": "GTranslateが他のウィンドウからテキストを読み取って翻訳するには、「画面収録」の許可が必要です。\n\n⚠️ これはテキスト認識（OCR）のみに使用されます。データが保存または共有されることはありません。",
+                "perm_btn": "システム設定を開く",
+                "perm_footer": "許可を与えた後、アプリの再起動が必要になる場合があります。"
+            },
+            "ko": {
+                "title": "GTranslate", "step1": "1. 창 선택:", "step2": "2. 영역 선택:", "step3": "3. 대상 언어:",
+                "desc_lang": "번역할 언어를 선택하세요.", "btn_start": "번역 시작",
+                "btn_stop": "중지", "btn_log": "로그 패널 열기/닫기", "btn_hide": "패널 숨기기",
+                "btn_quit": "종료", "status_ready": "준비됨", "status_processing": "번역 중...",
+                "status_stopped": "중지됨", "error_no_win": "오류: 창이 선택되지 않았습니다!",
+                "save_hint": "영역 이름:", "save_confirm": "저장 및 닫기", "ui_lang": "언어:",
+                "btn_clear_reg": "영역 지우기", "scan_speed": "스캔 속도:", "delete": "삭제", "save": "저장",
+                "region_not_selected": "영역: 선택되지 않음", "region_full": "영역: 전체 창",
+                "auto_selected": "자동 선택됨", "refresh": "창 새로고침", "pick_reg": "영역 선택",
+                "saved_regs_placeholder": "-- 저장된 영역 --", "region_label": "영역",
+                "pin": "고정", "pinned": "고정됨",
+                "perm_title": "화면 기록 권한 필요",
+                "perm_desc": "GTranslate가 다른 창에서 텍스트를 캡처하고 번역하려면 '화면 기록' 권한이 필요합니다.\n\n⚠️ 이는 텍스트 인식(OCR)에만 사용됩니다. 데이터는 절대 저장되거나 공유되지 않습니다.",
+                "perm_btn": "시스템 설정 열기",
+                "perm_footer": "권한을 허용한 후 앱을 재시작해야 할 수도 있습니다."
+            },
+            "zh-CN": {
+                "title": "GTranslate", "step1": "1. 选择窗口:", "step2": "2. 选择区域:", "step3": "3. 目标语言:",
+                "desc_lang": "选择您想要翻译的目标语言。", "btn_start": "开始翻译",
+                "btn_stop": "停止", "btn_log": "打开/关闭日志面板", "btn_hide": "隐藏面板",
+                "btn_quit": "退出", "status_ready": "就绪", "status_processing": "正在翻译...",
+                "status_stopped": "已停止", "error_no_win": "错误: 未选择窗口！",
+                "save_hint": "区域名称:", "save_confirm": "保存并关闭", "ui_lang": "语言:",
+                "btn_clear_reg": "清除区域", "scan_speed": "扫描速度:", "delete": "删除", "save": "保存",
+                "region_not_selected": "区域: 未选择", "region_full": "区域: 整个窗口",
+                "auto_selected": "自动选择", "refresh": "刷新窗口", "pick_reg": "选择区域",
+                "saved_regs_placeholder": "-- 已保存区域 --", "region_label": "区域",
+                "pin": "固定", "pinned": "已固定",
+                "perm_title": "需要屏幕录制权限",
+                "perm_desc": "GTranslate 需要“屏幕录制”权限才能从其他窗口抓取并翻译文本。\n\n⚠️ 这仅用于文本识别 (OCR)。您的数据绝不会被保存或共享。",
+                "perm_btn": "打开系统设置",
+                "perm_footer": "授予权限后，您可能需要重新启动应用程序。"
             }
         }
         self.current_ui_lang = "tr"
@@ -1090,11 +1107,11 @@ class TranslatorApp(QWidget):
         self.btn_hide.setText(t["btn_hide"])
         self.btn_quit.setText(t["btn_quit"])
         
-        # Permission Page
-        self.perm_title_lbl.setText(t["perm_title"])
-        self.perm_desc_lbl.setText(t["perm_desc"])
-        self.btn_open_perms.setText(t["perm_btn"])
-        self.perm_footer_lbl.setText(t["perm_footer"])
+        # Permission Page (With safety checks)
+        self.perm_title_lbl.setText(t.get("perm_title", "Permission Required"))
+        self.perm_desc_lbl.setText(t.get("perm_desc", "This app needs screen recording permission to function."))
+        self.btn_open_perms.setText(t.get("perm_btn", "Open System Settings"))
+        self.perm_footer_lbl.setText(t.get("perm_footer", ""))
         self.lbl_speed_text.setText(t["scan_speed"])
         
         # Sync Log Panel Language
