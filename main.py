@@ -454,22 +454,17 @@ class TranslatorApp(QWidget):
     def _setup_tray(self):
         self.tray_icon = QSystemTrayIcon(self)
         
-        # Create a custom game-like icon (White style)
+        # Create a very bold white 'G' for menu bar
         pixmap = QPixmap(64, 64)
         pixmap.fill(Qt.GlobalColor.transparent)
-        
         from PyQt6.QtGui import QPainter, QColor, QFont
         painter = QPainter(pixmap)
         painter.setRenderHint(QPainter.RenderHint.Antialiasing)
         
-        # Draw a rounded rectangle background (White)
-        painter.setBrush(QColor(255, 255, 255, 240))
-        painter.setPen(Qt.PenStyle.NoPen)
-        painter.drawRoundedRect(4, 4, 56, 56, 14, 14)
-        
-        # Draw a black "G"
-        painter.setPen(QColor(0, 0, 0))
-        font = QFont("Arial", 34, QFont.Weight.Bold)
+        # Draw a pure white "G" with maximum thickness
+        painter.setPen(QColor(255, 255, 255))
+        # ExtraBold weight (900) + Large font size
+        font = QFont(".AppleSystemUIFont", 52, QFont.Weight.ExtraBold)
         painter.setFont(font)
         painter.drawText(pixmap.rect(), Qt.AlignmentFlag.AlignCenter, "G")
         painter.end()
