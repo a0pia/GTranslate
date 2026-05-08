@@ -209,8 +209,8 @@ class TranslatorApp(QWidget):
                 "perm_title": "Ekran Kaydı İzni Gerekli",
                 "perm_desc": "GTranslate'in diğer pencereleri görebilmesi için 'Ekran Kaydı' iznine ihtiyacı vardır.\n\nÖNEMLİ: İzin verdikten sonra uygulamayı 'Uygulamadan Çık' butonuyla kapatıp YENİDEN BAŞLATMANIZ zorunludur.",
                 "perm_btn": "Sistem Ayarlarını Aç",
-                "perm_footer": "Eğer izin vermenize rağmen geçmiyorsa, uygulamayı kapatıp tekrar açın.",
-                "btn_force": "Yine de Devam Et (Eğer izin verdiyseniz)"
+                "perm_footer": "Eğer tik açık olmasına rağmen çalışmıyorsa, GTranslate'i listeden eksi (-) ile silip uygulamayı kapatıp açın.",
+                "btn_force": "Yine de Devam Et (İzinleri Verdim)"
             },
             "en": {
                 "title": "GTranslate", "step1": "1. Select Window:", "step2": "2. Select Region:", "step3": "3. Target Language:",
@@ -624,9 +624,12 @@ class TranslatorApp(QWidget):
             self.stack.setCurrentIndex(1) # Show permission page
 
     def _open_system_settings(self):
-        """Opens macOS System Settings for Privacy & Security."""
+        """Opens macOS System Settings and explicitly requests access to trigger the OS."""
         import subprocess
-        # Prioritize Screen Recording as requested
+        import Quartz
+        # Explicitly request access to trigger the system prompt/re-check
+        Quartz.CGRequestScreenCaptureAccess()
+        # Open the Screen Recording privacy pane
         subprocess.run(["open", "x-apple.systempreferences:com.apple.preference.security?Privacy_ScreenCapture"])
 
         # Animation setup
@@ -788,7 +791,7 @@ class TranslatorApp(QWidget):
         perm_lay.addStretch()
 
         self.btn_force_continue = QPushButton("Continue Anyway (If permissions are granted)")
-        self.btn_force_continue.setStyleSheet("background: transparent; color: #555; font-size: 9px; border: none;")
+        self.btn_force_continue.setStyleSheet("background: rgba(255,255,255,0.03); color: #777; font-size: 10px; border-radius: 5px; padding: 5px;")
         self.btn_force_continue.clicked.connect(lambda: self.stack.setCurrentIndex(0))
         perm_lay.addWidget(self.btn_force_continue)
         
