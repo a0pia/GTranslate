@@ -94,27 +94,25 @@ class RegionPickerDialog(QDialog):
         QTimer.singleShot(150, self._take_screenshot)
 
     def _take_screenshot(self):
-        """Captures the full screen and displays it for region selection."""
+        """Captures the selected window and displays it for region selection."""
         import tempfile
-        from window_picker import _capture_display_to_file
+        from window_picker import capture_window
         tmp = tempfile.mktemp(suffix=".png")
-        if not _capture_display_to_file(tmp):
+        img_path, _ = capture_window(self.window_info, tmp)
+        
+        if not img_path or not os.path.exists(img_path):
             self.reject()
             return
 
-        px = QPixmap(tmp)
-        try:
-            os.remove(tmp)
-        except Exception:
-            pass
-
+        px = QPixmap(img_path)
         if px.isNull():
             self.reject()
             return
 
+        # Show the window content in the dialog
         screen = QApplication.primaryScreen().geometry()
-        max_w  = int(screen.width()  * 0.95)
-        max_h  = int(screen.height() * 0.90)
+        max_w  = int(screen.width()  * 0.85)
+        max_h  = int(screen.height() * 0.85)
         scaled = px.scaled(max_w, max_h,
                            Qt.AspectRatioMode.KeepAspectRatio,
                            Qt.TransformationMode.SmoothTransformation)
@@ -122,11 +120,17 @@ class RegionPickerDialog(QDialog):
         self._img_label.setFixedSize(scaled.size())
         self.adjustSize()
 
-        # Map dialog coords → real screen coords
-        self._win_x   = 0
-        self._win_y   = 0
-        self._scale_x = screen.width()  / scaled.width()
-        self._scale_y = screen.height() / scaled.height()
+        # Scale factors: dialog coords -> window local coords
+        wx, wy, ww, wh = self.window_info['bounds']
+        self._win_x   = wx
+        self._win_y   = wy
+        self._scale_x = ww / scaled.width()
+        self._scale_y = wh / scaled.height()
+
+        try:
+            os.remove(img_path)
+        except Exception:
+            pass
 
     def mousePressEvent(self, e):
         if e.button() == Qt.MouseButton.LeftButton and self._img_label.pixmap():
